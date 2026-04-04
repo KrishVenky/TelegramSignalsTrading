@@ -1,4 +1,5 @@
 telethon==1.36.0
 groq>=0.11.0
+ollama>=0.3.0
 python-dotenv==1.0.1
 loguru==0.7.2

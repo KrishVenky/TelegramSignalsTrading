@@ -31,16 +31,32 @@ BATCH_DAYS_BACK: int = 7
 LLM_BATCH_SIZE: int = 30
 
 # ---------------------------------------------------------------------------
-# Groq model names
+# LLM Backend — switch between "groq" (cloud) and "ollama" (local)
 # ---------------------------------------------------------------------------
-# Text extraction — LLaMA 3.3 70B (30 RPM / 6 000 RPD on free tier)
+# Set to "ollama" to use your local GPU, "groq" to use the Groq cloud API.
+LLM_BACKEND: str = "ollama"
+
+# ---------------------------------------------------------------------------
+# Groq model names  (used when LLM_BACKEND = "groq")
+# ---------------------------------------------------------------------------
 GROQ_TEXT_MODEL: str = "llama-3.3-70b-versatile"
-
-# Vision / image extraction — LLaMA 4 Scout (supports vision, generous free tier)
 GROQ_VISION_MODEL: str = "meta-llama/llama-4-scout-17b-16e-instruct"
-
-# Max concurrent Groq calls (keeps us well under the per-minute rate limit)
 GROQ_MAX_CONCURRENT: int = 3
+
+# ---------------------------------------------------------------------------
+# Ollama settings  (used when LLM_BACKEND = "ollama")
+# ---------------------------------------------------------------------------
+# Ollama server — default localhost. Change if running on your PC over LAN:
+#   e.g. "http://192.168.1.50:11434"  (your PC's local IP)
+OLLAMA_HOST: str = "http://localhost:11434"
+
+# Text extraction model — Meta LLaMA 3.1 8B, fast and accurate
+OLLAMA_TEXT_MODEL: str = "llama3.1:8b"
+
+# Vision model — Meta's official multimodal model (natively trained, not a bolt-on)
+# llama3.2-vision:11b  → recommended for 4060 Ti 16 GB (~8 GB VRAM Q4)
+# llava:7b             → fallback if you only have 8 GB VRAM
+OLLAMA_VISION_MODEL: str = "llama3.2-vision:11b"
 
 
 # ---------------------------------------------------------------------------
