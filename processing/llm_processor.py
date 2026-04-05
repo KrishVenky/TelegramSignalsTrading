@@ -34,7 +34,7 @@ from config import (
     OLLAMA_TEXT_MODEL,
     OLLAMA_VISION_MODEL,
 )
-from utils import now_iso8601, strip_json_fences
+from utils import classify_signal_type, extract_json_from_response, now_iso8601, strip_json_fences
 
 load_dotenv()
 
@@ -171,13 +171,22 @@ def _build_vision_messages(prompt: str, b64_data: str, mime_type: str) -> list[d
 # ---------------------------------------------------------------------------
 
 def _parse_json(raw: str, expect_array: bool = True) -> Any:
-    cleaned = strip_json_fences(raw)
+    cleaned = extract_json_from_response(raw)
     try:
-        return json.loads(cleaned)
+        parsed = json.loads(cleaned)
     except json.JSONDecodeError as exc:
-        logger.error("JSON parse failed (array={}): {}. Raw: {!r}",
-                     expect_array, exc, cleaned[:500])
-        return None
+        # Last-ditch: try replacing all remaining invalid control chars
+        try:
+            sanitised = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", "", cleaned)
+            parsed = json.loads(sanitised)
+        except json.JSONDecodeError:
+            logger.error("JSON parse failed (array={}): {}. Raw: {!r}",
+                         expect_array, exc, cleaned[:300])
+            return None
+    # If we expected an array but got a single dict, wrap it
+    if expect_array and isinstance(parsed, dict):
+        return [parsed]
+    return parsed
 
 
 # ---------------------------------------------------------------------------
@@ -217,6 +226,11 @@ async def extract_text_signals(messages: list[dict[str, Any]]) -> list[dict[str,
         if "message_id" in item:
             item["message_id"] = str(item["message_id"])
         item["message_type"] = "text"
+        # Regex override: if LLM left signal_type vague, sharpen with regex
+        raw_text = item.get("raw_message") or ""
+        llm_type = (item.get("signal_type") or "").upper()
+        if llm_type not in ("DIRECT_CALL", "BROKER_CALL", "CHART_SETUP", "RECAP"):
+            item["signal_type"] = classify_signal_type(raw_text)
         signals.append(item)
 
     logger.info("Text batch: {} signal(s) from {} message(s)", len(signals), len(messages))
@@ -280,6 +294,11 @@ async def extract_image_signal(item: dict[str, Any]) -> dict[str, Any]:
     parsed.setdefault("channel", item["channel"])
     parsed.setdefault("timestamp", item["timestamp"])
     parsed["message_type"] = "image"
+    # Regex override on image: use caption text if available
+    caption = item.get("text") or parsed.get("raw_message") or ""
+    llm_type = (parsed.get("signal_type") or "").upper()
+    if llm_type not in ("DIRECT_CALL", "BROKER_CALL", "CHART_SETUP", "RECAP"):
+        parsed["signal_type"] = classify_signal_type(caption)
 
     logger.info("Image signal extracted for message_id={}", item["message_id"])
     return parsed

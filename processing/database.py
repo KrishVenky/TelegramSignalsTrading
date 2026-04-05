@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS signals (
     sentiment    TEXT,
     confidence   TEXT,
     timeframe    TEXT,
+    signal_type  TEXT,
     summary      TEXT,
     raw_message  TEXT,
     message_type TEXT,
@@ -44,12 +45,12 @@ _INSERT_SQL = """
 INSERT OR IGNORE INTO signals (
     message_id, channel, timestamp, ticker, action,
     entry_price, target_price, stop_loss, sentiment,
-    confidence, timeframe, summary, raw_message,
+    confidence, timeframe, signal_type, summary, raw_message,
     message_type, processed_at
 ) VALUES (
     :message_id, :channel, :timestamp, :ticker, :action,
     :entry_price, :target_price, :stop_loss, :sentiment,
-    :confidence, :timeframe, :summary, :raw_message,
+    :confidence, :timeframe, :signal_type, :summary, :raw_message,
     :message_type, :processed_at
 );
 """
@@ -75,6 +76,9 @@ def _ensure_message_type_column(conn: sqlite3.Connection) -> None:
     if "message_type" not in cols:
         conn.execute(_ADD_COLUMN_SQL)
         logger.info("Migrated DB: added message_type column.")
+    if "signal_type" not in cols:
+        conn.execute("ALTER TABLE signals ADD COLUMN signal_type TEXT;")
+        logger.info("Migrated DB: added signal_type column.")
 
 
 def init_db(db_path: str = DB_PATH) -> None:
@@ -90,8 +94,8 @@ def init_db(db_path: str = DB_PATH) -> None:
 # Text fields that must be a plain string (not a list) for SQLite.
 _TEXT_FIELDS = (
     "message_id", "channel", "timestamp", "ticker", "action",
-    "sentiment", "confidence", "timeframe", "summary",
-    "raw_message", "message_type", "processed_at",
+    "sentiment", "confidence", "timeframe", "signal_type",
+    "summary", "raw_message", "message_type", "processed_at",
 )
 
 
@@ -114,6 +118,7 @@ def _coerce_signal(signal: dict[str, Any]) -> dict[str, Any]:
 
     signal.setdefault("processed_at", now_iso8601())
     signal.setdefault("message_type", "text")
+    signal.setdefault("signal_type", "GENERAL")
     return signal
 
 

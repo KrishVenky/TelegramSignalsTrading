@@ -75,6 +75,7 @@ EXTRACTION_FIELDS: list[str] = [
     "sentiment",     # BULLISH, BEARISH, NEUTRAL            (str)
     "confidence",    # HIGH, MEDIUM, LOW                    (str)
     "timeframe",     # e.g. "intraday", "swing", "long-term" (str | null)
+    "signal_type",   # DIRECT_CALL | BROKER_CALL | CHART_SETUP | RECAP | GENERAL
     "summary",       # One-sentence plain-English summary   (str)
     "raw_message",   # Original unmodified message text     (str)
 ]
@@ -99,12 +100,19 @@ LLM_USER_PROMPT_TEMPLATE: str = (
     "Return a JSON array where each object has these exact fields:\n"
     "message_id, channel, timestamp, ticker, action, entry_price, "
     "target_price, stop_loss, sentiment, confidence, timeframe, "
-    "summary, raw_message\n\n"
+    "signal_type, summary, raw_message\n\n"
     "Rules:\n"
     "- ticker: stock/crypto symbol only if EXPLICITLY mentioned (e.g. RELIANCE, NIFTY, BTC). null otherwise.\n"
     "- action: BUY/SELL/HOLD/WATCH only if a clear call is made. null otherwise.\n"
+    "- signal_type: classify using EXACTLY one of these values:\n"
+    "    DIRECT_CALL = urgent buy/sell NOW with fire/rocket emojis or URGENT/NOW keyword\n"
+    "    BROKER_CALL = analyst/brokerage recommendation (Jefferies, Goldman, PT price)\n"
+    "    CHART_SETUP = technical analysis, breakout zone, pattern — no urgency\n"
+    "    RECAP = past performance (gave 10%, target achieved, from our call)\n"
+    "    GENERAL = market commentary, news, no tradeable call\n"
+    "- confidence: HIGH only if ticker + action + price are all present and call is clear.\n"
     "- Do NOT guess tickers from context. If not stated, use null.\n"
-    "- Promotional messages: set all signal fields to null."
+    "- Promotional messages: set all signal fields to null, signal_type to GENERAL."
 )
 
 # ---------------------------------------------------------------------------

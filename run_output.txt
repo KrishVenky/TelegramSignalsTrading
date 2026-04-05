@@ -1,0 +1,328 @@
+﻿.venv\Scripts\python.exe : 
+[32m2026-04-05 
+18:49:24[0m | [1mINFO    
+[0m | [36m__main__[0m:[
+36m_main[0m:[36m59[0m 
+ΓÇö [1m=== Telegram 
+Intelligence System 
+starting ΓÇö mode: batch 
+===[0m
+At line:1 char:1
++ .venv\Scripts\python.exe 
+-X utf8 main.py --mode 
+batch 2>&1 | Out-File ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~
+    + CategoryInfo         
+     : NotSpecified: ([3  
+  2m2026-04-05...: batch   
+  ===[0m:String) [], R    
+emoteException
+    + FullyQualifiedErrorI 
+   d : NativeCommandError
+ 
+[32m2026-04-05 
+18:49:24[0m | [1mINFO    
+[0m | [36mprocessing.data
+base[0m:[36minit_db[0m:
+[36m91[0m ΓÇö 
+[1mDatabase initialised 
+at signals.db[0m
+[32m2026-04-05 
+18:49:25[0m | [1mINFO    
+[0m | [36mtelegram.client
+[0m:[36m_save_session_str
+ing[0m:[36m37[0m ΓÇö 
+[1mSession string saved 
+to telegram.session[0m
+[32m2026-04-05 
+18:49:25[0m | [1mINFO    
+[0m | [36mtelegram.client
+[0m:[36mget_client[0m:[
+36m71[0m ΓÇö 
+[1mTelegramClient ready 
+(user: User(id=7553786950, 
+is_self=True, 
+contact=False, 
+mutual_contact=False, 
+deleted=False, bot=False, 
+bot_chat_history=False, 
+bot_nochats=False, 
+verified=False, 
+restricted=False, 
+min=False, 
+bot_inline_geo=False, 
+support=False, scam=False, 
+apply_min_photo=True, 
+fake=False, 
+bot_attach_menu=False, 
+premium=False, 
+attach_menu_enabled=False, 
+bot_can_edit=False, 
+close_friend=False, 
+stories_hidden=False, 
+stories_unavailable=True, c
+ontact_require_premium=Fals
+e, bot_business=False, acce
+ss_hash=9006160667946930663
+, first_name='Krishna', 
+last_name='V', 
+username=None, 
+phone='919110423447', 
+photo=None, status=UserStat
+usOffline(was_online=dateti
+me.datetime(2026, 4, 5, 
+13, 10, 37, tzinfo=datetime
+.timezone.utc)), 
+bot_info_version=None, 
+restriction_reason=[], bot_
+inline_placeholder=None, 
+lang_code=None, 
+emoji_status=None, 
+usernames=[], 
+stories_max_id=None, 
+color=None, 
+profile_color=None))[0m
+[32m2026-04-05 
+18:49:25[0m | [1mINFO    
+[0m | [36mprocessing.llm_
+processor[0m:[36m<module>
+[0m:[36m54[0m ΓÇö 
+[1mLLM backend: Ollama @ 
+http://localhost:11434 
+(text=llama3.1:8b, vision=l
+lama3.2-vision:11b)[0m
+[32m2026-04-05 
+18:49:25[0m | [1mINFO    
+[0m | [36mtelegram.batch_
+fetcher[0m:[36mfetch_hist
+ory[0m:[36m89[0m ΓÇö 
+[1mBatch fetch: 
+channel=@FinanceWithSunil 
+limit=500 days_back=7 
+(since 2026-03-29)[0m
+[32m2026-04-05 
+18:49:25[0m | [1mINFO    
+[0m | [36mprocessing.llm_
+processor[0m:[36mllm_work
+er[0m:[36m319[0m ΓÇö 
+[1mLLM worker started 
+(backend=ollama).[0m
+[32m2026-04-05 
+18:49:27[0m | [1mINFO    
+[0m | [36mtelegram.batch_
+fetcher[0m:[36mfetch_hist
+ory[0m:[36m109[0m ΓÇö 
+[1m  ΓÇª 100 raw messages 
+fetched from 
+@FinanceWithSunil[0m
+[32m2026-04-05 
+18:49:27[0m | [1mINFO    
+[0m | [36mtelegram.batch_
+fetcher[0m:[36mfetch_hist
+ory[0m:[36m114[0m ΓÇö 
+[1mFetched 141 raw 
+messages from 
+@FinanceWithSunil. 
+ClassifyingΓÇª[0m
+[32m2026-04-05 
+18:50:39[0m | [1mINFO    
+[0m | [36mtelegram.batch_
+fetcher[0m:[36mfetch_hist
+ory[0m:[36m124[0m ΓÇö 
+[1mBatch complete: 
+channel=@FinanceWithSunil 
+enqueued=140 skipped=1[0m
+[32m2026-04-05 
+18:50:39[0m | [1mINFO    
+[0m | [36mtelegram.batch_
+fetcher[0m:[36mfetch_hist
+ory[0m:[36m89[0m ΓÇö 
+[1mBatch fetch: 
+channel=@ChartWallah00 
+limit=500 days_back=7 
+(since 2026-03-29)[0m
+[32m2026-04-05 
+18:50:40[0m | [1mINFO    
+[0m | [36mtelegram.batch_
+fetcher[0m:[36mfetch_hist
+ory[0m:[36m114[0m ΓÇö 
+[1mFetched 8 raw messages 
+from @ChartWallah00. 
+ClassifyingΓÇª[0m
+[32m2026-04-05 
+18:50:41[0m | [1mINFO    
+[0m | [36mtelegram.batch_
+fetcher[0m:[36mfetch_hist
+ory[0m:[36m124[0m ΓÇö 
+[1mBatch complete: 
+channel=@ChartWallah00 
+enqueued=5 skipped=3[0m
+[32m2026-04-05 
+18:50:41[0m | [1mINFO    
+[0m | [36mtelegram.batch_
+fetcher[0m:[36mfetch_hist
+ory[0m:[36m89[0m ΓÇö 
+[1mBatch fetch: 
+channel=@johntradingwick 
+limit=500 days_back=7 
+(since 2026-03-29)[0m
+[32m2026-04-05 
+18:50:42[0m | [1mINFO    
+[0m | [36mtelegram.batch_
+fetcher[0m:[36mfetch_hist
+ory[0m:[36m114[0m ΓÇö 
+[1mFetched 0 raw messages 
+from @johntradingwick. 
+ClassifyingΓÇª[0m
+[32m2026-04-05 
+18:50:42[0m | [1mINFO    
+[0m | [36mtelegram.batch_
+fetcher[0m:[36mfetch_hist
+ory[0m:[36m124[0m ΓÇö 
+[1mBatch complete: 
+channel=@johntradingwick 
+enqueued=0 skipped=0[0m
+[32m2026-04-05 
+18:50:42[0m | [1mINFO    
+[0m | [36mtelegram.batch_
+fetcher[0m:[36mrun_batch_
+for_all_channels[0m:[36m1
+39[0m ΓÇö [1mAll 
+channels batched. Total 
+enqueued: 145[0m
+Traceback (most recent 
+call last):
+  File "C:\Users\krish\AppD
+ata\Local\Programs\Python\P
+ython310\lib\sre_parse.py",
+ line 1039, in 
+parse_template
+    this = 
+chr(ESCAPES[this][1])
+KeyError: '\\u'
+
+During handling of the 
+above exception, another 
+exception occurred:
+
+Traceback (most recent 
+call last):
+  File "C:\Users\krish\Docu
+ments\VSCode\TelegramBot\Te
+legramSignalsTrading\main.p
+y", line 124, in <module>
+    main()
+  File "C:\Users\krish\Docu
+ments\VSCode\TelegramBot\Te
+legramSignalsTrading\main.p
+y", line 117, in main
+    asyncio.run(_main(args.
+mode))
+  File "C:\Users\krish\AppD
+ata\Local\Programs\Python\P
+ython310\lib\asyncio\runner
+s.py", line 44, in run
+    return loop.run_until_c
+omplete(main)
+  File "C:\Users\krish\AppD
+ata\Local\Programs\Python\P
+ython310\lib\asyncio\base_e
+vents.py", line 641, in 
+run_until_complete
+    return future.result()
+  File "C:\Users\krish\Docu
+ments\VSCode\TelegramBot\Te
+legramSignalsTrading\main.p
+y", line 75, in _main
+    await llm_task
+  File "C:\Users\krish\Docu
+ments\VSCode\TelegramBot\Te
+legramSignalsTrading\proces
+sing\llm_processor.py", 
+line 344, in llm_worker
+    result = await extract_
+image_signal(img_item)
+  File "C:\Users\krish\Docu
+ments\VSCode\TelegramBot\Te
+legramSignalsTrading\proces
+sing\llm_processor.py", 
+line 286, in 
+extract_image_signal
+    parsed = 
+_parse_json(raw, 
+expect_array=False)
+  File "C:\Users\krish\Docu
+ments\VSCode\TelegramBot\Te
+legramSignalsTrading\proces
+sing\llm_processor.py", 
+line 174, in _parse_json
+    cleaned = extract_json_
+from_response(raw)
+  File "C:\Users\krish\Docu
+ments\VSCode\TelegramBot\Te
+legramSignalsTrading\utils.
+py", line 84, in 
+extract_json_from_response
+    text = _clean_bad_unico
+de_escapes(text)
+  File "C:\Users\krish\Docu
+ments\VSCode\TelegramBot\Te
+legramSignalsTrading\utils.
+py", line 68, in 
+_clean_bad_unicode_escapes
+    return _INVALID_UNICODE
+_ESCAPE_RE.sub("\\u00ff", 
+text)
+  File "C:\Users\krish\AppD
+ata\Local\Programs\Python\P
+ython310\lib\re.py", line 
+326, in _subx
+    template = 
+_compile_repl(template, 
+pattern)
+  File "C:\Users\krish\AppD
+ata\Local\Programs\Python\P
+ython310\lib\re.py", line 
+317, in _compile_repl
+    return sre_parse.parse_
+template(repl, pattern)
+  File "C:\Users\krish\AppD
+ata\Local\Programs\Python\P
+ython310\lib\sre_parse.py",
+ line 1042, in 
+parse_template
+    raise s.error('bad 
+escape %s' % this, 
+len(this))
+re.error: bad escape \u at 
+position 0
+Exception ignored in: 
+<function _ProactorBasePipe
+Transport.__del__ at 
+0x0000021AB9C7E3B0>
+Traceback (most recent 
+call last):
+  File "C:\Users\krish\AppD
+ata\Local\Programs\Python\P
+ython310\lib\asyncio\proact
+or_events.py", line 116, 
+in __del__
+  File "C:\Users\krish\AppD
+ata\Local\Programs\Python\P
+ython310\lib\asyncio\proact
+or_events.py", line 108, 
+in close
+  File "C:\Users\krish\AppD
+ata\Local\Programs\Python\P
+ython310\lib\asyncio\base_e
+vents.py", line 745, in 
+call_soon
+  File "C:\Users\krish\AppD
+ata\Local\Programs\Python\P
+ython310\lib\asyncio\base_e
+vents.py", line 510, in 
+_check_closed
+RuntimeError: Event loop 
+is closed
