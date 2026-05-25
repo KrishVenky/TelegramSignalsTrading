@@ -24,7 +24,7 @@ equity markets (NSE/BSE via Zerodha Kite). It has two major stages:
 TelegramSignalsTrading/         ← git root
 └── trading_intel/              ← all code lives here (this is the working directory)
     ├── .env                    # secrets — NEVER committed
-    ├── .env.example            # template
+    ├── .env.example            # template (committed, safe)
     ├── .gitignore
     ├── README.md               # public-facing, no channel names
     ├── CLAUDE.md               # this file
@@ -32,7 +32,10 @@ TelegramSignalsTrading/         ← git root
     ├── config.py               # THE master config — all tunable knobs here
     ├── main.py                 # entry point
     ├── utils.py                # shared helpers (timestamps, text clean, promo filter)
-    ├── signals.db              # SQLite database (gitignored)
+    ├── start.ps1               # morning startup script (batch + dashboard)
+    ├── signals.db              # SQLite signal database (gitignored)
+    ├── trades.db               # SQLite trade log (gitignored)
+    ├── kite_token.json         # Kite daily access token (gitignored)
     ├── telegram.session        # Telethon session (gitignored, copy between machines)
     ├── trading_intel.log       # rotating log (gitignored)
     ├── telegram/               # Telethon layer
@@ -40,12 +43,19 @@ TelegramSignalsTrading/         ← git root
     │   ├── client.py           # MTProto auth, session management
     │   ├── batch_fetcher.py    # historical 7-day fetch
     │   └── realtime_listener.py # live NewMessage event handler
-    └── processing/             # LLM + storage layer
+    ├── processing/             # LLM + storage layer
+    │   ├── __init__.py
+    │   ├── database.py         # SQLite schema, insert, dedup, query
+    │   ├── llm_processor.py    # dual-backend LLM (Ollama + Groq), vision + text
+    │   ├── media_processor.py  # in-memory image download from Telegram
+    │   └── message_queue.py    # asyncio.Queue bridging Telegram events → LLM worker
+    ├── kite/                   # Zerodha KiteConnect layer (Stage 2)
+    │   ├── __init__.py
+    │   ├── client.py           # OAuth, kite_token.json storage, LTP fetch
+    │   └── order_manager.py    # paper/live MIS orders, trades.db logging
+    └── dashboard/              # Local web dashboard
         ├── __init__.py
-        ├── database.py         # SQLite schema, insert, dedup, query
-        ├── llm_processor.py    # dual-backend LLM (Ollama + Groq), vision + text
-        ├── media_processor.py  # in-memory image download from Telegram
-        └── message_queue.py    # asyncio.Queue bridging Telegram events → LLM worker
+        └── app.py              # FastAPI app — signals, Kite auth, confirm buy modal
 ```
 
 ---
@@ -57,7 +67,9 @@ TELEGRAM_API_ID=        # from my.telegram.org → API Development Tools
 TELEGRAM_API_HASH=      # same
 TELEGRAM_PHONE=         # +91XXXXXXXXXX format
 GROQ_API_KEY=           # only needed if LLM_BACKEND = "groq"
-                        # KITE_API_KEY and KITE_API_SECRET will go here for Stage 2
+KITE_API_KEY=           # from kite.trade/apps → Personal app
+KITE_API_SECRET=        # same — for session token exchange
+KITE_ACCESS_TOKEN=      # auto-filled by dashboard/kite/client.py — do not edit manually
 ```
 
 ---
@@ -70,11 +82,11 @@ GROQ_API_KEY=           # only needed if LLM_BACKEND = "groq"
 | Local LLM | `ollama` | Meta LLaMA models, runs on 4060 Ti 16 GB |
 | Cloud LLM | `groq` | Fallback, free tier has rate limits |
 | Database | `sqlite3` (stdlib) | WAL mode, no server needed |
+| Dashboard | `fastapi` + `uvicorn` | Local web UI on port 8000 |
+| Broker | `kiteconnect` | Zerodha MIS order placement |
 | Logging | `loguru` | Console + rotating file |
 | Async runtime | `asyncio` | Everything is async |
 | Env management | `python-dotenv` | |
-
-**NOT installed, coming in Stage 2:** `kiteconnect`
 
 ---
 
@@ -455,16 +467,20 @@ Or use **DB Browser for SQLite** (free GUI) — open `signals.db` directly.
 
 ---
 
-## Current State (as of April 2026)
+## Current State (as of May 2026)
 
 - [x] Full signal pipeline working end-to-end
-- [x] Ollama dual-backend (Ollama + Groq, one-line switch)
+- [x] Dual-backend LLM (Ollama + Groq, one-line switch in config.py)
 - [x] Promo filter (3 layers: regex pre-filter, LLM prompt instruction, DB actionable guard)
 - [x] Image/chart extraction via Llama 3.2 Vision 11B
-- [x] 76+ signals in DB, all from one channel (others were inactive during test window)
 - [x] Bugs fixed: list-type coercion, per-signal DB transactions, Groq retry delay parsing
+- [x] **kite/client.py** — OAuth login URL, daily token exchange, kite_token.json storage, LTP fetch
+- [x] **kite/order_manager.py** — paper/live MIS buy + SL-M sell, trades.db logging
+- [x] **dashboard/app.py** — FastAPI local dashboard with signal feed, Kite auth, recommended buys, confirm buy modal, risk config panel, recent trades sidebar
+- [x] **config.py** — full trading risk params (1% SL, 2% TP, ₹10k/trade, PAPER_TRADE=True)
+- [x] **start.ps1** — one-command morning startup (batch fetch + dashboard)
 - [x] Pushed to GitHub: https://github.com/KrishVenky/TelegramSignalsTrading
-- [ ] `signal_type` field (DIRECT_CALL / BROKER_CALL / CHART_SETUP / RECAP)
-- [ ] `kite/` module — paper trader
-- [ ] Decision engine
-- [ ] Live trading (after paper validation)
+- [ ] `signal_type` field (DIRECT_CALL / BROKER_CALL / CHART_SETUP / RECAP) — needed for auto-filter
+- [ ] `kite/position_tracker.py` — WebSocket-based TP monitoring (currently user clicks manually)
+- [ ] Decision engine (auto-enter on DIRECT_CALL signals when trading is enabled)
+- [ ] Live trading (after paper validation — run paper mode for 2-3 weeks first)

@@ -34,7 +34,7 @@ LLM_BATCH_SIZE: int = 30
 # LLM Backend — switch between "groq" (cloud) and "ollama" (local)
 # ---------------------------------------------------------------------------
 # Set to "ollama" to use your local GPU, "groq" to use the Groq cloud API.
-LLM_BACKEND: str = "ollama"
+LLM_BACKEND: str = "groq"    # laptop: use groq | desktop (4060Ti): change to "ollama"
 
 # ---------------------------------------------------------------------------
 # Groq model names  (used when LLM_BACKEND = "groq")
@@ -123,3 +123,35 @@ LLM_RETRY_BASE_DELAY: float = 2.0   # seconds; doubled each retry
 
 # Maximum seconds the queue consumer waits before flushing a partial batch.
 QUEUE_CONSUMER_TIMEOUT: float = 5.0
+
+# ---------------------------------------------------------------------------
+# Kite Connect credentials  (loaded from .env — never hardcode here)
+# ---------------------------------------------------------------------------
+import os as _os
+from dotenv import load_dotenv as _load_dotenv
+_load_dotenv()
+
+KITE_API_KEY: str    = _os.getenv("KITE_API_KEY", "")
+KITE_API_SECRET: str = _os.getenv("KITE_API_SECRET", "")
+
+# ---------------------------------------------------------------------------
+# Trading / risk parameters
+# ---------------------------------------------------------------------------
+# Set PAPER_TRADE = True to simulate trades without real orders (safe default).
+# Flip to False only when you're ready to trade live money.
+PAPER_TRADE: bool = True
+
+# Rupees deployed per signal trade.
+CAPITAL_PER_TRADE: int = 10_000      # ₹10 000 per trade
+
+# Maximum number of open positions at any time.
+MAX_OPEN_POSITIONS: int = 3          # max ₹30 000 live
+
+# Daily loss kill-switch — stops all new trades for the day.
+MAX_DAILY_LOSS: int = 1_500          # ₹1 500
+
+# ─── Exit thresholds ────────────────────────────────────────────────────────
+# Change these to adjust how aggressively the algo takes profit / cuts loss.
+TRADE_TAKE_PROFIT_PCT: float = 0.02  # +2 % → take profit  ← edit here
+TRADE_STOP_LOSS_PCT: float   = 0.01  # −1 % → stop loss    ← edit here
+

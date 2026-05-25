@@ -1,6 +1,7 @@
 # ── Credentials & secrets ─────────────────────────────────────────────────
 .env
 *.env
+kite_token.json     # Kite daily access token — never commit
 
 # ── Virtual environments ───────────────────────────────────────────────────
 .venv/
